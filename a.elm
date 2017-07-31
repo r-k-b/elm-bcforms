@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Date exposing (Date)
 import Html exposing (text)
 
 
@@ -14,64 +15,63 @@ type alias FieldType =
     , renderIDTag : Bool
     }
 
+type alias Selectable =
+  { option : String
+  , selected : Bool
+  }
 
 type FieldTypes
-    = FieldTypeText
-    | FieldTypeNumber
-    | FieldTypeBool
-    | FieldTypeDateTime
-    | FieldTypeDropdown
-    | FieldTypeCheckbox
-    | FieldTypeRadio
-    | FieldTypeMedia
-    | FieldTypeMultiline
-    | FieldTypeListbox
-    | FieldTypeHyperlink
-    | FieldTypeDataSource
-
-
-foo : FieldTypes
-foo =
-    FieldTypeText
+    = FieldTypeText (Maybe String)
+    | FieldTypeNumber (Maybe Float)
+    | FieldTypeBool (Maybe Bool)
+    | FieldTypeDateTime (Maybe Date)
+    | FieldTypeDropdown (List Selectable)
+    | FieldTypeCheckbox (List Selectable)
+    | FieldTypeRadio (List Selectable)
+    | FieldTypeMedia (Maybe String)
+    | FieldTypeMultiline (Maybe String)
+    | FieldTypeListbox (List Selectable)
+    | FieldTypeHyperlink (Maybe String)
+    | FieldTypeDataSource (Maybe Int)
 
 
 getFieldTypeProps : FieldTypes -> FieldType
 getFieldTypeProps fType =
     case fType of
-        FieldTypeText ->
+        FieldTypeText _ ->
             FieldType 1 "Text (String)" "text" False
 
-        FieldTypeNumber ->
+        FieldTypeNumber _ ->
             FieldType 2 "Number" "number" False
 
-        FieldTypeBool ->
+        FieldTypeBool _ ->
             FieldType 3 "True/False (Boolean)" "boolean-checkbox" False
 
-        FieldTypeDateTime ->
+        FieldTypeDateTime _ ->
             FieldType 4 "DateTime" "datetime" False
 
-        FieldTypeDropdown ->
+        FieldTypeDropdown _ ->
             FieldType 5 "List (Dropdown List)" "select" False
 
-        FieldTypeCheckbox ->
+        FieldTypeCheckbox _ ->
             FieldType 6 "List (Checkbox List)" "checkbox" False
 
-        FieldTypeRadio ->
+        FieldTypeRadio _ ->
             FieldType 7 "List (Radio List)" "radio" False
 
-        FieldTypeMedia ->
+        FieldTypeMedia _ ->
             FieldType 8 "Media" "media" False
 
-        FieldTypeMultiline ->
+        FieldTypeMultiline _ ->
             FieldType 9 "Text (Multiline)" "text" False
 
-        FieldTypeListbox ->
+        FieldTypeListbox _ ->
             FieldType 10 "List (Listbox List)" "listbox" False
 
-        FieldTypeHyperlink ->
+        FieldTypeHyperlink _ ->
             FieldType 11 "Text (Hyperlink)" "text" False
 
-        FieldTypeDataSource ->
+        FieldTypeDataSource _ ->
             FieldType 12 "Data Source" "select" True
 
 
@@ -108,7 +108,7 @@ someFields =
     [ CustomFF
         { numericID = 12345
         , longName = "Wef Erg"
-        , fieldType = FieldTypeText
+        , fieldType = FieldTypeText Nothing
         , mandatory = False
         , dataSourceID = Nothing
         , useWYSIWYG = False
@@ -117,7 +117,7 @@ someFields =
     , SystemFF
         { systemName = "EmailAddress"
         , longName = "Email"
-        , fieldType = FieldTypeText
+        , fieldType = FieldTypeText Nothing
         , mandatory = True
         , useWYSIWYG = False
         , unknownProperty = 0
